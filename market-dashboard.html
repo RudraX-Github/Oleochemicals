@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2B Castor Market Research Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+        .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .nav-item.active { background-color: #e0e7ff; color: #4338ca; border-left: 4px solid #4338ca; }
+        .nav-item { border-left: 4px solid transparent; transition: all 0.2s; }
+        /* Custom scrollbar for lists */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+
+  <!-- Universal Enterprise Portal Nav -->
+  <link rel="stylesheet" href="assets/nav.css">
+  <script src="assets/nav.js" defer></script>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+  <div id="universal-portal-bar"></div>
+
+
+    <!-- Mobile Header -->
+    <div class="md:hidden bg-slate-900 text-white flex justify-between items-center p-4 z-20 shadow-md">
+        <h1 class="font-bold text-lg">Castor Market Intelligence</h1>
+        <button id="mobile-menu-btn" class="focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+    </div>
+    
+    <!-- Mobile Menu Container -->
+    <div id="mobile-menu" class="hidden md:hidden bg-slate-800 text-white flex-col w-full z-10 absolute top-[60px] left-0 shadow-xl border-b border-slate-700">
+        <button class="nav-btn w-full text-left px-6 py-4 border-b border-slate-700 font-medium active bg-slate-700" data-target="tab-products">Product Apps & Chemistries</button>
+        <button class="nav-btn w-full text-left px-6 py-4 border-b border-slate-700 font-medium" data-target="tab-hubs">Global Export Hubs</button>
+        <button class="nav-btn w-full text-left px-6 py-4 font-medium" data-target="tab-pricing">Pricing, Strategy & Policy</button>
+    </div>
+
+    <!-- Desktop Sidebar -->
+    <aside class="hidden md:flex flex-col w-72 bg-white border-r border-slate-200 h-full shadow-lg z-10 flex-shrink-0">
+        <div class="p-6 bg-slate-900 text-white">
+            <h1 class="text-xl font-extrabold tracking-tight">Castor Data Hub</h1>
+            <p class="text-xs text-indigo-300 mt-1 uppercase tracking-wider font-semibold">Strategic B2B Report</p>
+        </div>
+        <nav class="flex-1 py-4 space-y-1 overflow-y-auto">
+            <button class="nav-btn nav-item active w-full flex items-center px-6 py-3 text-sm font-medium text-slate-600 hover:bg-slate-50 text-left" data-target="tab-products">
+                <svg class="w-5 h-5 mr-3 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                Product Apps & Chemistries
+            </button>
+            <button class="nav-btn nav-item w-full flex items-center px-6 py-3 text-sm font-medium text-slate-600 hover:bg-slate-50 text-left" data-target="tab-hubs">
+                <svg class="w-5 h-5 mr-3 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Global Export Hubs
+            </button>
+            <button class="nav-btn nav-item w-full flex items-center px-6 py-3 text-sm font-medium text-slate-600 hover:bg-slate-50 text-left" data-target="tab-pricing">
+                <svg class="w-5 h-5 mr-3 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Pricing & Strategies
+            </button>
+        </nav>
+        <div class="p-4 border-t border-slate-200 text-xs text-slate-400 text-center">Global Market Report 2026</div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 h-full overflow-y-auto relative p-4 sm:p-8 bg-slate-50">
+        <div class="max-w-7xl mx-auto pb-24">
+
+            <!-- TAB 1: Product Applications & Chemistries -->
+            <section id="tab-products" class="tab-content active">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Product Applications & Chemistries</h2>
+                    <p class="mt-2 text-slate-600">Detailed breakdown of castor derivatives, their industry applications, end products, and chemical roles.</p>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- 12-HSA Table -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="bg-indigo-50 border-b border-indigo-100 p-5 flex flex-col sm:flex-row justify-between sm:items-center">
+                            <div>
+                                <h3 class="text-xl font-bold text-indigo-900">12-Hydroxystearic Acid (12-HSA)</h3>
+                                <p class="text-sm text-indigo-700 mt-1">HS 2918.19.00 • Derived from hydrogenation of castor oil.</p>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-slate-500 bg-slate-50 uppercase">
+                                    <tr>
+                                        <th class="px-6 py-3 font-semibold">Industry</th>
+                                        <th class="px-6 py-3 font-semibold">End Products</th>
+                                        <th class="px-6 py-3 font-semibold">Role of 12-HSA</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="px-6 py-4 font-medium text-slate-900">Lubricants & Automotive</td>
+                                        <td class="px-6 py-4 text-slate-600">Lithium-complex greases, multi-purpose industrial greases, aviation lubricants</td>
+                                        <td class="px-6 py-4 text-slate-600">Primary thickener. Provides high-temp resistance, water resistance, and mechanical stability.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="px-6 py-4 font-medium text-slate-900">Cosmetics & Personal Care</td>
+                                        <td class="px-6 py-4 text-slate-600">Deodorant sticks, lipsticks, skin creams, lotions, pomades</td>
+                                        <td class="px-6 py-4 text-slate-600">Gelling agent, emollient, and viscosity modifier. Provides rigid structure for sticks.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="px-6 py-4 font-medium text-slate-900">Plastics & Rubber</td>
+                                        <td class="px-6 py-4 text-slate-600">PVC compounding, synthetic rubber, plastic wrapping</td>
+                                        <td class="px-6 py-4 text-slate-600">Internal lubricant, plasticizer, and activator. Prevents sticking to molds.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="px-6 py-4 font-medium text-slate-900">Paints, Inks & Coatings</td>
+                                        <td class="px-6 py-4 text-slate-600">Printing inks, wood finishes, polishes, liquid paints</td>
+                                        <td class="px-6 py-4 text-slate-600">Rheology modifier. Improves flow, prevents pigment settling, enhances gloss.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Sebacic Acid Table -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="bg-blue-50 border-b border-blue-100 p-5">
+                            <h3 class="text-xl font-bold text-blue-900">Sebacic Acid</h3>
+                            <p class="text-sm text-blue-700 mt-1">HS 2917.13.00 • Co-product from high-temperature alkaline cleavage.</p>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-slate-500 bg-slate-50 uppercase">
+                                    <tr>
+                                        <th class="px-6 py-3 font-semibold">Industry</th>
+                                        <th class="px-6 py-3 font-semibold">End Products</th>
+                                        <th class="px-6 py-3 font-semibold">Role of Sebacic Acid</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="px-6 py-4 font-medium text-slate-900">Polymers & Plastics</td>
+                                        <td class="px-6 py-4 text-slate-600">Nylon 6,10, bio-plastics, polyurethanes (toothbrush bristles, auto parts)</td>
+                                        <td class="px-6 py-4 text-slate-600">Primary monomer. Gives mechanical strength, chemical resistance, low moisture absorption.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="px-6 py-4 font-medium text-slate-900">Aviation & Automotive</td>
+                                        <td class="px-6 py-4 text-slate-600">Synthetic ester lubricants (DOS, DBS), engine coolants, antifreeze</td>
+                                        <td class="px-6 py-4 text-slate-600">Base for extreme-temp synthetic lubricants. Highly effective corrosion inhibitor.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="px-6 py-4 font-medium text-slate-900">Cosmetics</td>
+                                        <td class="px-6 py-4 text-slate-600">Foundations, concealers, sunscreens, hair care</td>
+                                        <td class="px-6 py-4 text-slate-600">Masking agent, film-former, and skin-conditioning agent to improve texture.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="px-6 py-4 font-medium text-slate-900">Chemical Mfg (Industrial)</td>
+                                        <td class="px-6 py-4 text-slate-600">Metalworking fluids, adhesives, sealants, powder coatings</td>
+                                        <td class="px-6 py-4 text-slate-600">Provides structural flexibility to adhesives; anti-corrosion additive in cutting fluids.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 2-Octanol Table -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="bg-teal-50 border-b border-teal-100 p-5">
+                            <h3 class="text-xl font-bold text-teal-900">2-Octanol (Capryl Alcohol)</h3>
+                            <p class="text-sm text-teal-700 mt-1">HS 2917.13.00 • Co-product of Sebacic Acid production.</p>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-slate-500 bg-slate-50 uppercase">
+                                    <tr>
+                                        <th class="px-6 py-3 font-semibold">Industry</th>
+                                        <th class="px-6 py-3 font-semibold">End Products</th>
+                                        <th class="px-6 py-3 font-semibold">Role of 2-Octanol</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="px-6 py-4 font-medium text-slate-900">Chemical Mfg</td>
+                                        <td class="px-6 py-4 text-slate-600">Plasticizers (Dicapryl Phthalate), surfactants, heavy-duty degreasers</td>
+                                        <td class="px-6 py-4 text-slate-600">Chemical intermediate and powerful, low-volatility solvent.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="px-6 py-4 font-medium text-slate-900">Paints & Coatings</td>
+                                        <td class="px-6 py-4 text-slate-600">Emulsion paints, baking varnishes, lacquers</td>
+                                        <td class="px-6 py-4 text-slate-600">Excellent solvent and flow-control agent (prevents blistering).</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="px-6 py-4 font-medium text-slate-900">Agrochemicals</td>
+                                        <td class="px-6 py-4 text-slate-600">Pesticides, herbicides, industrial wastewater treatment</td>
+                                        <td class="px-6 py-4 text-slate-600">Highly efficient anti-foaming (defoaming) agent.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="px-6 py-4 font-medium text-slate-900">Flavors & Fragrances</td>
+                                        <td class="px-6 py-4 text-slate-600">Perfumes, soaps, artificial flavorings</td>
+                                        <td class="px-6 py-4 text-slate-600">Base ester ingredient to create fruity/floral scent profiles.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: Global Export Hubs & Demand Drivers -->
+            <section id="tab-hubs" class="tab-content">
+                <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between">
+                    <div>
+                        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Global Export Hubs & Demand Drivers</h2>
+                        <p class="mt-2 text-slate-600">Top 10 strategic cities, ports, and manufacturing clusters across 9 key industries.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Hub Card Generator Function simulation -->
+                    <script>
+                        const hubsData = [
+                            { title: 'Lubricants & Automotive', icon: 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z', color: 'bg-blue-800', list: ['Houston, TX (USA)', 'Hamburg (Germany)', 'Tokyo (Japan)', 'Singapore (Jurong)', 'Ulsan (South Korea)', 'Rotterdam (Netherlands)', 'Antwerp (Belgium)', 'Chicago, IL (USA)', 'Jubail (Saudi Arabia)', 'Shanghai (China)'] },
+                            { title: 'Cosmetics & Personal Care', icon: 'M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z', color: 'bg-pink-800', list: ['Paris (France)', 'Seoul (South Korea)', 'New York, NY (USA)', 'Tokyo (Japan)', 'Milan (Italy)', 'London (UK)', 'Los Angeles, CA (USA)', 'Grasse (France)', 'Guangzhou (China)', 'São Paulo (Brazil)'] },
+                            { title: 'Plastics & Rubber', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10', color: 'bg-orange-800', list: ['Shanghai (China)', 'Houston, TX (USA)', 'Düsseldorf (Germany)', 'Rayong (Thailand)', 'Antwerp (Belgium)', 'Akron, OH (USA)', 'Osaka (Japan)', 'Ulsan (South Korea)', 'Dahej (India)', 'Taipei (Taiwan)'] },
+                            { title: 'Paints, Inks & Coatings', icon: 'M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485', color: 'bg-indigo-800', list: ['Cleveland, OH (USA)', 'Frankfurt (Germany)', 'Osaka (Japan)', 'Chicago, IL (USA)', 'Tokyo (Japan)', 'Shanghai (China)', 'Mumbai (India)', 'Milan (Italy)', 'Houston, TX (USA)', 'Antwerp (Belgium)'] },
+                            { title: 'Polymers & Plastics', icon: 'M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5', color: 'bg-teal-800', list: ['Hengshui (China)', 'Ludwigshafen (Germany)', 'Wilmington, DE (USA)', 'Antwerp (Belgium)', 'Dahej (India)', 'Ulsan (South Korea)', 'Chiba (Japan)', 'Houston, TX (USA)', 'Leverkusen (Germany)', 'Singapore'] },
+                            { title: 'Aviation & Automotive', icon: 'M12 19l9 2-9-18-9 18 9-2zm0 0v-8', color: 'bg-slate-700', list: ['Toulouse (France)', 'Seattle, WA (USA)', 'Stuttgart (Germany)', 'Detroit, MI (USA)', 'Nagoya (Japan)', 'Munich (Germany)', 'Derby (UK)', 'Wichita, KS (USA)', 'Tokyo (Japan)', 'Shanghai (China)'] },
+                            { title: 'Chemical Mfg', icon: 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414', color: 'bg-emerald-800', list: ['Leverkusen (Germany)', 'Jubail (Saudi Arabia)', 'Singapore (Jurong)', 'Dahej (India)', 'Houston, TX (USA)', 'Antwerp (Belgium)', 'Ludwigshafen (Germany)', 'Ulsan (South Korea)', 'Rotterdam (Netherlands)', 'Tarragona (Spain)'] },
+                            { title: 'Agrochemicals', icon: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064', color: 'bg-lime-800', list: ['Basel (Switzerland)', 'Research Triangle (USA)', 'Mumbai (India)', 'Leverkusen (Germany)', 'Tel Aviv (Israel)', 'São Paulo (Brazil)', 'Beijing (China)', 'St. Louis, MO (USA)', 'Hyderabad (India)', 'Tokyo (Japan)'] },
+                            { title: 'Flavors & Fragrances', icon: 'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143', color: 'bg-fuchsia-800', list: ['Grasse (France)', 'Geneva (Switzerland)', 'Holzminden (Germany)', 'New York, NY (USA)', 'Paris (France)', 'Shanghai (China)', 'Singapore', 'Mumbai (India)', 'Tokyo (Japan)', 'São Paulo (Brazil)'] }
+                        ];
+
+                        document.write(hubsData.map(hub => `
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col h-80 transition hover:shadow-md">
+                                <div class="${hub.color} p-4 border-b border-black/10 text-white flex items-center shrink-0">
+                                    <svg class="w-5 h-5 mr-3 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${hub.icon}"></path></svg>
+                                    <h3 class="font-bold text-sm tracking-wide uppercase">${hub.title}</h3>
+                                </div>
+                                <div class="p-4 flex-1 overflow-y-auto custom-scrollbar bg-slate-50/50">
+                                    <ol class="list-decimal list-inside space-y-2 text-sm text-slate-700 font-medium">
+                                        ${hub.list.map(city => `<li class="pb-1 border-b border-slate-100 last:border-0 pl-1">${city}</li>`).join('')}
+                                    </ol>
+                                </div>
+                            </div>
+                        `).join(''));
+                    </script>
+                </div>
+            </section>
+
+            <!-- TAB 3: Pricing, Strategy & Policy -->
+            <section id="tab-pricing" class="tab-content">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Pricing, Strategies & Policies</h2>
+                    <p class="mt-2 text-slate-600">2026 Market pricing outlook, competitor models, workflow strategy, and regulatory impacts.</p>
+                </div>
+
+                <div class="space-y-10">
+                    <!-- Pricing Tables & Strategies Grid -->
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        
+                        <!-- Pricing Trends Table -->
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+                            <div class="bg-slate-800 p-5 text-white">
+                                <h3 class="font-bold text-lg">Current Spot Pricing Trends</h3>
+                                <p class="text-xs text-slate-300 mt-1">Estimated ranges (USD/MT) - Subject to logistics & purity.</p>
+                            </div>
+                            <div class="p-0 flex-1 overflow-x-auto">
+                                <table class="w-full text-sm text-left border-collapse">
+                                    <thead class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                                        <tr>
+                                            <th class="px-5 py-3 font-semibold">Product</th>
+                                            <th class="px-5 py-3 font-semibold">Market</th>
+                                            <th class="px-5 py-3 font-semibold">Price (USD/MT)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-100">
+                                        <tr>
+                                            <td class="px-5 py-4 font-bold text-blue-700">Sebacic Acid</td>
+                                            <td class="px-5 py-4 text-slate-600">US Market</td>
+                                            <td class="px-5 py-4 font-mono font-bold text-slate-800">$4,600 – $5,050</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-5 py-4 font-bold text-blue-700">Sebacic Acid</td>
+                                            <td class="px-5 py-4 text-slate-600">EU (Ger/NL)</td>
+                                            <td class="px-5 py-4 font-mono font-bold text-slate-800">$3,650 – $4,650</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-5 py-4 font-bold text-indigo-700">12-HSA</td>
+                                            <td class="px-5 py-4 text-slate-600">US Market</td>
+                                            <td class="px-5 py-4 font-mono font-bold text-slate-800">$1,900 – $2,300</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-5 py-4 font-bold text-indigo-700">12-HSA</td>
+                                            <td class="px-5 py-4 text-slate-600">EU Market</td>
+                                            <td class="px-5 py-4 font-mono font-bold text-slate-800">$2,100 – $2,500</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Competitor Strategies Grid -->
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:border-amber-400 transition">
+                                <h4 class="font-bold text-amber-700 mb-2 flex items-center"><span class="bg-amber-100 text-amber-800 w-6 h-6 rounded-full flex items-center justify-center text-xs mr-2">1</span> Tiered Purity</h4>
+                                <p class="text-xs text-slate-600 leading-relaxed">Aggressive pricing on industrial grades to block synthetics; +15-20% premiums on 99.5% cosmetic/polymer high-purity grades.</p>
+                            </div>
+                            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:border-blue-400 transition">
+                                <h4 class="font-bold text-blue-700 mb-2 flex items-center"><span class="bg-blue-100 text-blue-800 w-6 h-6 rounded-full flex items-center justify-center text-xs mr-2">2</span> Localized (DDP)</h4>
+                                <p class="text-xs text-slate-600 leading-relaxed">Leasing 3PL space in Houston/Antwerp. Offers Delivered Duty Paid to guarantee JIT delivery, capturing a local premium.</p>
+                            </div>
+                            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:border-emerald-400 transition">
+                                <h4 class="font-bold text-emerald-700 mb-2 flex items-center"><span class="bg-emerald-100 text-emerald-800 w-6 h-6 rounded-full flex items-center justify-center text-xs mr-2">3</span> Index-Linked</h4>
+                                <p class="text-xs text-slate-600 leading-relaxed">Tying long-term supply contracts to agricultural commodity indexes to auto-adjust for volatile raw castor seed costs.</p>
+                            </div>
+                            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:border-purple-400 transition">
+                                <h4 class="font-bold text-purple-700 mb-2 flex items-center"><span class="bg-purple-100 text-purple-800 w-6 h-6 rounded-full flex items-center justify-center text-xs mr-2">4</span> Sustainability</h4>
+                                <p class="text-xs text-slate-600 leading-relaxed">Capturing EU high-margin segments via verifiable sustainable sourcing and circular economy environment certifications.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5-Step Market Entry Workflow -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <h3 class="font-bold text-xl text-slate-900 mb-6">5-Step Market Entry Workflow</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                            <div class="relative p-4 bg-slate-50 border border-slate-100 rounded-lg">
+                                <div class="absolute -top-3 -left-3 w-8 h-8 bg-slate-800 text-white font-bold rounded-full flex items-center justify-center shadow">1</div>
+                                <h4 class="font-bold text-sm text-slate-800 mb-1 mt-2">Baseline Cost</h4>
+                                <p class="text-xs text-slate-600">Calculate floor price combining raw oil, cracking/hydrogenation, inland, and ocean freight.</p>
+                            </div>
+                            <div class="relative p-4 bg-slate-50 border border-slate-100 rounded-lg">
+                                <div class="absolute -top-3 -left-3 w-8 h-8 bg-slate-800 text-white font-bold rounded-full flex items-center justify-center shadow">2</div>
+                                <h4 class="font-bold text-sm text-slate-800 mb-1 mt-2">Target Premium</h4>
+                                <p class="text-xs text-slate-600">Invest in refining to hit 99.5% purity for 12-HSA/Sebacic, bypassing commoditized low-margin grease.</p>
+                            </div>
+                            <div class="relative p-4 bg-slate-50 border border-slate-100 rounded-lg">
+                                <div class="absolute -top-3 -left-3 w-8 h-8 bg-slate-800 text-white font-bold rounded-full flex items-center justify-center shadow">3</div>
+                                <h4 class="font-bold text-sm text-slate-800 mb-1 mt-2">3PL Warehousing</h4>
+                                <p class="text-xs text-slate-600">Lease space in Antwerp/Houston instead of shipping direct to create JIT supply chains.</p>
+                            </div>
+                            <div class="relative p-4 bg-slate-50 border border-slate-100 rounded-lg">
+                                <div class="absolute -top-3 -left-3 w-8 h-8 bg-slate-800 text-white font-bold rounded-full flex items-center justify-center shadow">4</div>
+                                <h4 class="font-bold text-sm text-slate-800 mb-1 mt-2">Penetration Pricing</h4>
+                                <p class="text-xs text-slate-600">Offer high-purity grades at DDP terms matching competitor standard-grades to induce fast adoption.</p>
+                            </div>
+                            <div class="relative p-4 bg-slate-50 border border-slate-100 rounded-lg">
+                                <div class="absolute -top-3 -left-3 w-8 h-8 bg-indigo-600 text-white font-bold rounded-full flex items-center justify-center shadow">5</div>
+                                <h4 class="font-bold text-sm text-indigo-900 mb-1 mt-2">Contract Indexing</h4>
+                                <p class="text-xs text-slate-600">Post-validation, transition buyers from spot-market to annual contracts tied to raw material indexes.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Policy-to-Business Mapping -->
+                    <div>
+                        <h3 class="font-bold text-xl text-slate-900 mb-4">Policy-to-Business Impact Mapping</h3>
+                        <div class="space-y-4">
+                            <!-- REACH -->
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row overflow-hidden hover:shadow-md transition">
+                                <div class="bg-slate-50 p-5 md:w-1/3 border-b md:border-b-0 md:border-r border-slate-200 flex items-center">
+                                    <div>
+                                        <h4 class="font-bold text-slate-800 text-lg">EU REACH</h4>
+                                        <p class="text-xs text-slate-500 uppercase tracking-wide">Chemical Authorization</p>
+                                    </div>
+                                    <svg class="w-6 h-6 text-slate-300 ml-auto hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                </div>
+                                <div class="p-5 md:w-2/3 bg-white">
+                                    <span class="inline-block bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full mb-2 border border-green-200">+$150 to +$300/MT Premium</span>
+                                    <p class="text-sm text-slate-600">Requires upfront capital for lab testing, but creates a strict barrier against low-tier competitors, enabling higher sustained European pricing.</p>
+                                </div>
+                            </div>
+                            <!-- US Tariffs -->
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row overflow-hidden hover:shadow-md transition">
+                                <div class="bg-slate-50 p-5 md:w-1/3 border-b md:border-b-0 md:border-r border-slate-200 flex items-center">
+                                    <div>
+                                        <h4 class="font-bold text-slate-800 text-lg">US Tariffs & GSP</h4>
+                                        <p class="text-xs text-slate-500 uppercase tracking-wide">Import Duties</p>
+                                    </div>
+                                    <svg class="w-6 h-6 text-slate-300 ml-auto hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                </div>
+                                <div class="p-5 md:w-2/3 bg-white">
+                                    <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full mb-2 border border-indigo-200">Margin Protection</span>
+                                    <p class="text-sm text-slate-600">Monitoring exact US tariff codes (HS 2918.19 & 2917.13) ensures evasion of unexpected import duties, enabling competitive FOB price quoting vs domestic mfg.</p>
+                                </div>
+                            </div>
+                            <!-- Export Incentives -->
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row overflow-hidden hover:shadow-md transition">
+                                <div class="bg-slate-50 p-5 md:w-1/3 border-b md:border-b-0 md:border-r border-slate-200 flex items-center">
+                                    <div>
+                                        <h4 class="font-bold text-slate-800 text-lg">Export Incentives</h4>
+                                        <p class="text-xs text-slate-500 uppercase tracking-wide">e.g., RoDTEP (India)</p>
+                                    </div>
+                                    <svg class="w-6 h-6 text-slate-300 ml-auto hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                </div>
+                                <div class="p-5 md:w-2/3 bg-white">
+                                    <span class="inline-block bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full mb-2 border border-blue-200">Cost Reduction (2% - 5%)</span>
+                                    <p class="text-sm text-slate-600">Leveraging local government export tax remissions lowers effective baseline production cost. This funds aggressive international pricing tactics.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navBtns = document.querySelectorAll('.nav-btn');
+            const tabs = document.querySelectorAll('.tab-content');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            // Tab Switching Logic
+            navBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const targetId = e.currentTarget.getAttribute('data-target');
+                    
+                    // Reset all tabs
+                    tabs.forEach(tab => tab.classList.remove('active'));
+                    // Reset all buttons
+                    navBtns.forEach(b => {
+                        b.classList.remove('active', 'bg-slate-700'); 
+                        if(b.classList.contains('nav-item')){
+                            b.classList.remove('bg-e0e7ff', 'border-indigo-600'); // desktop reset
+                        }
+                    });
+
+                    // Activate selected tab
+                    document.getElementById(targetId).classList.add('active');
+                    
+                    // Activate corresponding buttons (mobile & desktop)
+                    document.querySelectorAll(`.nav-btn[data-target="${targetId}"]`).forEach(b => {
+                        b.classList.add('active');
+                        if (b.closest('#mobile-menu')) {
+                            b.classList.add('bg-slate-700');
+                        }
+                    });
+
+                    // Close mobile menu if open
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                    
+                    // Scroll to top
+                    document.querySelector('main').scrollTop = 0;
+                });
+            });
+
+            // Mobile Menu Toggle
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        });
+    </script>
+</body>
+</html>

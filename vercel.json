@@ -1,0 +1,51 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/factory-3d", "destination": "/factory-3d.html" },
+    { "source": "/market-dashboard", "destination": "/market-dashboard.html" },
+    { "source": "/lubricant-expo-2027", "destination": "/lubricant-expo-2027.html" },
+    { "source": "/agrochemical", "destination": "/agrochemical-directory.html" },
+    { "source": "/aviation-automotive", "destination": "/aviation-automotive-directory.html" },
+    { "source": "/chemical-manufacturing", "destination": "/chemical-manufacturing-directory.html" },
+    { "source": "/cosmetics-personal-care", "destination": "/cosmetics-personal-care-directory.html" },
+    { "source": "/flavors-fragrances", "destination": "/flavors-fragrances-directory.html" },
+    { "source": "/lubricants-automotive", "destination": "/lubricants-automotive-directory.html" },
+    { "source": "/paints-coatings", "destination": "/paints-coatings-directory.html" },
+    { "source": "/plastics-rubber", "destination": "/plastics-rubber-directory.html" },
+    { "source": "/polymers-plastics-top50", "destination": "/polymers-plastics-top50.html" }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "gujarat-castor-oleochemicals-platform",
+  "version": "1.0.0",
+  "description": "Enterprise global sourcing intelligence, B2B market analytics, and 3D digital twin platform for Sebacic Acid, 12-HSA, and 2-Octanol industrial consumers.",
+  "scripts": {
+    "start": "serve .",
+    "dev": "serve ."
+  },
+  "keywords": [
+    "castor-oil",
+    "sebacic-acid",
+    "12-hydroxystearic-acid",
+    "2-octanol",
+    "digital-twin",
+    "threejs",
+    "oleochemicals",
+    "chemical-sourcing",
+    "b2b-marketplace",
+    "vercel"
+  ],
+  "author": "Gujarat Castor Oleochemicals",
+  "license": "UNLICENSED",
+  "private": true
+}
